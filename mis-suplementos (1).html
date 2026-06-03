@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Suplementos">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#ffffff">
+<title>Mis Suplementos</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;font-size:16px}
+.hdr{position:sticky;top:0;background:#fff;border-bottom:1px solid rgba(0,0,0,.08);padding:12px 16px 0;z-index:10}
+.hdr-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.nbtn{width:38px;height:38px;border-radius:10px;border:1px solid rgba(0,0,0,.1);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;color:#555}
+.nbtn:active{background:#f0f0eb}
+.di{flex:1}
+.dm{font-size:15px;font-weight:600;color:#1a1a1a}
+.ds{font-size:11px;color:#aaa;margin-top:1px}
+.tbtn{font-size:12px;padding:6px 13px;border-radius:20px;border:1px solid rgba(0,0,0,.1);background:#fff;cursor:pointer;color:#555;font-family:inherit}
+.tbtn:active{background:#f0f0eb}
+.pl{display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-bottom:5px}
+.pb{height:4px;background:#ebebdf;border-radius:4px;margin-bottom:0;overflow:hidden}
+.pf{height:100%;background:#1D9E75;border-radius:4px;transition:width .3s ease}
+.content{padding:12px 14px 100px}
+.cbanner{display:none;background:#E1F5EE;border-radius:13px;padding:11px 16px;margin-bottom:12px;font-size:13px;color:#0F6E56;text-align:center;font-weight:600}
+.cbanner.show{display:block}
+.infobanner{border-radius:13px;padding:10px 14px;margin-bottom:10px;font-size:12px;font-weight:500;text-align:center}
+.infobanner.last{background:#FEF9E7;color:#B7770D}
+.infobanner.ended{background:#F5F5F0;color:#999}
+.topbar{display:flex;align-items:center;gap:10px;padding:13px 14px;background:#EAF3DE;border-radius:13px;margin-bottom:10px;cursor:pointer;min-height:54px}
+.topbar.done{opacity:.4}
+.topbar.done .tn{text-decoration:line-through}
+.tcb{width:24px;height:24px;border-radius:7px;border:1.5px solid #3B6D11;background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:background .15s;font-size:14px;color:#fff}
+.tcb.ck{background:#3B6D11}
+.tn{font-size:13px;color:#3B6D11;flex:1;line-height:1.3;font-weight:500}
+.slot{background:#fff;border-radius:13px;margin-bottom:10px;overflow:hidden;border:1px solid rgba(0,0,0,.06)}
+.sh{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(0,0,0,.05)}
+.sic{font-size:16px;width:20px;text-align:center}
+.slb{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#777;flex:1}
+.sth{font-size:11px;color:#bbb}
+.sc{font-size:11px;color:#bbb;min-width:28px;text-align:right}
+.sc.ok{color:#1D9E75;font-weight:700}
+.snote{font-size:11px;color:#999;padding:7px 14px;background:#fafaf7;border-bottom:1px solid rgba(0,0,0,.04);line-height:1.4}
+.si{display:flex;align-items:center;gap:10px;padding:13px 14px;cursor:pointer;min-height:50px;border-bottom:1px solid rgba(0,0,0,.04)}
+.si:last-child{border-bottom:none}
+.si:active{background:#f8f8f5}
+.si.done{opacity:.38}
+.si.done .sn{text-decoration:line-through}
+.cb{width:24px;height:24px;border-radius:7px;border:1.5px solid #d0d0c0;background:#fff;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;font-size:14px;color:#fff}
+.cb.ck{background:#1D9E75;border-color:#1D9E75}
+.sn{font-size:13px;color:#1a1a1a;flex:1;line-height:1.3}
+.badge{font-size:10px;padding:3px 8px;border-radius:10px;flex-shrink:0;font-weight:500}
+.b-pro{background:#E1F5EE;color:#0F6E56}
+.b-ant{background:#EEEDFE;color:#3C3489}
+.b-vit{background:#FAEEDA;color:#633806}
+.b-tgi{background:#FAECE7;color:#712B13}
+.b-pow{background:#E6F1FB;color:#185FA5}
+.badge-last{background:#FEF9E7;color:#B7770D;font-size:10px;padding:3px 8px;border-radius:10px;flex-shrink:0;font-weight:500}
+.foot{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid rgba(0,0,0,.08);padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;align-items:center;gap:16px}
+.fstat{text-align:center}
+.fn{font-size:22px;font-weight:700;color:#1a1a1a;line-height:1}
+.fl{font-size:10px;color:#aaa;margin-top:2px}
+.rbtn{margin-left:auto;font-size:12px;padding:8px 14px;border-radius:10px;border:1px solid rgba(0,0,0,.1);background:transparent;cursor:pointer;color:#888;font-family:inherit}
+.rbtn:active{background:#f0f0eb}
+.sep{width:1px;height:32px;background:rgba(0,0,0,.08)}
+.empty-day{text-align:center;padding:40px 20px;color:#bbb;font-size:14px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-row">
+    <button class="nbtn" onclick="cd(-1)" aria-label="Día anterior">‹</button>
+    <div class="di">
+      <div class="dm" id="dm">—</div>
+      <div class="ds" id="ds"></div>
+    </div>
+    <button class="tbtn" onclick="gt()">Hoy</button>
+    <button class="nbtn" onclick="cd(1)" aria-label="Día siguiente">›</button>
+  </div>
+  <div class="pl"><span id="pt">—</span><span id="pp">—</span></div>
+  <div class="pb"><div class="pf" id="pf" style="width:0%"></div></div>
+</div>
+
+<div class="content">
+  <div class="cbanner" id="cb">✓ ¡Todas las tomas del día completadas!</div>
+  <div id="ct"></div>
+</div>
+
+<div class="foot">
+  <div class="fstat"><div class="fn" id="fd">—</div><div class="fl">Hechas</div></div>
+  <div class="sep"></div>
+  <div class="fstat"><div class="fn" id="ft">—</div><div class="fl">Total</div></div>
+  <button class="rbtn" onclick="resetDay()">Reiniciar</button>
+</div>
+
+<script>
+const MES_L=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const DIA_L=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+
+// ── Fecha de inicio de la pauta ──────────────────────────────
+const START = new Date(2026, 5, 3); // 3 de junio de 2026
+
+function getEndDate(dur) {
+  const d = new Date(START);
+  const months = dur === '2m' ? 2 : dur === '3m' ? 3 : 6;
+  d.setMonth(d.getMonth() + months);
+  d.setDate(d.getDate() - 1); // último día inclusive = START + meses - 1 día
+  d.setHours(23, 59, 59, 999);
+  return d;
+}
+
+function isActive(dur, viewDate) {
+  return viewDate >= START && viewDate <= getEndDate(dur);
+}
+
+function isLastDay(dur, viewDate) {
+  const end = getEndDate(dur);
+  return viewDate.toDateString() === end.toDateString();
+}
+
+// ── Suplementos ──────────────────────────────────────────────
+const SUPS=[
+  {id:'p1',n:'Multidophilus Probiotic (Solaray)',c:'pro',t:'des',d:[1,2,3,4,5],dur:'3m'},
+  {id:'p2',n:'Acidophilus 40+ (Solgar)',c:'pro',t:'alm',d:[3,4,5,6,0],dur:'3m'},
+  {id:'p3',n:'Saccharomyces Boulardii',c:'pro',t:'noch',d:[2,3,4,5,6],dur:'3m'},
+  {id:'a1',n:'Glisodin (2 cápsulas)',c:'ant',t:'des',d:[0,1,2,3,4,5,6],dur:'6m'},
+  {id:'a2',n:'Ashwagandha 600mg',c:'ant',t:'des',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'a3',n:'Isoflavonas de Soja',c:'ant',t:'des',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'a4',n:'Isoflavonas de Soja',c:'ant',t:'alm',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'a5',n:'Quercetina Complex',c:'ant',t:'des',d:[1,2,3,4,5],dur:'3m'},
+  {id:'a6',n:'Cardo Mariano (Silimarina)',c:'ant',t:'des',d:[3,4,5,6,0],dur:'3m'},
+  {id:'a7',n:'Cardo Mariano (Silimarina)',c:'ant',t:'alm',d:[3,4,5,6,0],dur:'3m'},
+  {id:'a8',n:'Zinc y Selenio',c:'ant',t:'des',d:[1,2,3,4],dur:'3m'},
+  {id:'a9',n:'Vitamina D3+K2',c:'ant',t:'des',d:[1,2,3,4,5],dur:'3m'},
+  {id:'a10',n:'NAC 500mg — 1ª dosis',c:'ant',t:'pre1',d:[1,2,3,4],dur:'3m'},
+  {id:'a11',n:'NAC 500mg — 2ª dosis',c:'ant',t:'pre2',d:[1,2,3,4],dur:'3m'},
+  {id:'a12',n:'AZO Cranberry',c:'ant',t:'des',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'a13',n:'AZO Cranberry',c:'ant',t:'alm',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'a14',n:'Ácido Alfa Lipoico 300mg',c:'ant',t:'alm',d:[1,2,3,4,5],dur:'3m'},
+  {id:'a15',n:'Omega 3',c:'ant',t:'alm',d:[1,2,3,4,5],dur:'3m'},
+  {id:'a16',n:'Inositol 750mg',c:'ant',t:'cen',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'a17',n:'Glicinato de Magnesio 400mg',c:'ant',t:'cen',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'v1',n:'Vitamina E 400-800 UI',c:'vit',t:'des',d:[0,1,2,3,4,5,6],dur:'2m'},
+  {id:'v2',n:'Vitamina C 500mg',c:'vit',t:'des',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'v3',n:'Vitamina C 500mg',c:'vit',t:'alm',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'v4',n:'Vitamina C 500mg',c:'vit',t:'cen',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'v5',n:'Vitamina A 5000 UI',c:'vit',t:'des',d:[0,1,2,3,4,5,6],dur:'2m'},
+  {id:'v6',n:'Biotina 1000μg',c:'vit',t:'des',d:[0,1,2,3,4,5,6],dur:'2m'},
+  {id:'t1',n:'Gastrozym enzimas (Bonusan)',c:'tgi',t:'gast',d:[0,1,2,3,4,5,6],dur:'3m'},
+  {id:'g1',n:'Glutavance L-Glutamina (2.5g en agua)',c:'pow',t:'med',d:[0,1,2,3,4,5,6],dur:'3m'},
+];
+
+const TOPICO_DUR = '3m';
+
+const SLOTS=[
+  {k:'des',l:'Desayuno',h:'7:30 h',ic:'☕'},
+  {k:'med',l:'Media mañana',h:'9:30–10:00 h',ic:'💧',note:'⚠ Sin alimentos. Disolver 2.5g en agua.'},
+  {k:'pre1',l:'Pre-almuerzo · NAC 1ª',h:'≈11:30 h',ic:'⏰',note:'⚠ Estómago vacío — 2h antes del almuerzo.'},
+  {k:'gast',l:'Pre-almuerzo · Gastrozym',h:'≈13:00 h',ic:'💊',note:'30 min antes del almuerzo.'},
+  {k:'alm',l:'Almuerzo',h:'13:30 h',ic:'🥗'},
+  {k:'pre2',l:'Tarde · NAC 2ª dosis',h:'≈16:30 h',ic:'⏰',note:'⚠ Estómago vacío — 2h antes de la cena.'},
+  {k:'cen',l:'Cena',h:'18:30 h',ic:'🌙'},
+  {k:'noch',l:'Noche',h:'post-cena',ic:'🌛'},
+];
+
+const BC={pro:'b-pro',ant:'b-ant',vit:'b-vit',tgi:'b-tgi',pow:'b-pow'};
+const BL={pro:'Probiótico',ant:'Antioxidante',vit:'Vitamina',tgi:'TGI',pow:'Bebida'};
+
+let off=0, ck=new Set(), dkey='';
+
+function dk(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function gd(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+off);return d}
+
+function totalDay(di, viewDate){
+  const active = SUPS.filter(s => s.d.includes(di) && isActive(s.dur, viewDate));
+  const topicoOn = isActive(TOPICO_DUR, viewDate);
+  return active.length + (topicoOn ? 1 : 0);
+}
+
+function loadDay(){
+  const date=gd(), di=date.getDay();
+  dkey=dk(date);
+  document.getElementById('dm').textContent=DIA_L[di]+', '+date.getDate()+' de '+MES_L[date.getMonth()];
+  document.getElementById('ds').textContent=off===0?'Hoy':off===-1?'Ayer':off===1?'Mañana':'';
+  try{const r=localStorage.getItem('sup:'+dkey);ck=new Set(r?JSON.parse(r):[]);}catch(e){ck=new Set();}
+  render(di, date); upProg(di, date);
+}
+
+function render(di, viewDate){
+  let h='';
+
+  // Banner de último día por duración
+  ['2m','3m','6m'].forEach(dur => {
+    if(isLastDay(dur, viewDate)){
+      const labels={'2m':'2 meses (Vit. E, A y Biotina)','3m':'3 meses (mayoría de suplementos)','6m':'6 meses (Glisodin)'};
+      h+=`<div class="infobanner last">⚠️ Último día de los suplementos de ${labels[dur]}</div>`;
+    }
+  });
+
+  // Tópico
+  const topicoOn = isActive(TOPICO_DUR, viewDate);
+  if(topicoOn){
+    const td=ck.has('top'), lastTop=isLastDay(TOPICO_DUR, viewDate);
+    h+=`<div class="topbar${td?' done':''}" onclick="tog('top',${di})">
+      <div class="tcb${td?' ck':''}">${td?'✓':''}</div>
+      <span style="font-size:20px">🧴</span>
+      <span class="tn">Tópico: Ammonium Lactate 12%<br>
+        <span style="font-size:11px;opacity:.75;font-weight:400">Post-ducha · piel húmeda · todo el cuerpo</span>
+      </span>
+      ${lastTop?'<span class="badge-last">Último día</span>':''}
+    </div>`;
+  }
+
+  let anySlot = false;
+  SLOTS.forEach(sl=>{
+    const items=SUPS.filter(s=>s.t===sl.k && s.d.includes(di) && isActive(s.dur, viewDate));
+    if(!items.length)return;
+    anySlot = true;
+    const sd=items.filter(x=>ck.has(x.id)).length, all=sd===items.length;
+    h+=`<div class="slot"><div class="sh">
+      <span class="sic">${sl.ic}</span>
+      <span class="slb">${sl.l}</span>
+      <span class="sth">${sl.h}</span>
+      <span class="sc${all?' ok':''}">${sd}/${items.length}</span>
+    </div>`;
+    if(sl.note)h+=`<div class="snote">${sl.note}</div>`;
+    items.forEach(x=>{
+      const done=ck.has(x.id), last=isLastDay(x.dur, viewDate);
+      h+=`<div class="si${done?' done':''}" onclick="tog('${x.id}',${di})">
+        <div class="cb${done?' ck':''}">${done?'✓':''}</div>
+        <span class="sn">${x.n}</span>
+        ${last?'<span class="badge-last">Último día</span>':''}
+        <span class="badge ${BC[x.c]}">${BL[x.c]}</span>
+      </div>`;
+    });
+    h+=`</div>`;
+  });
+
+  // Día sin suplementos (fuera del rango de la pauta)
+  if(!anySlot && !topicoOn){
+    const ended = viewDate > getEndDate('6m');
+    h+=`<div class="empty-day">${ended ? '🎉 La pauta ha finalizado.<br>¡Enhorabuena!' : '📅 Navega a un día dentro de la pauta<br>(desde el 3 jun. 2026)'}</div>`;
+  }
+
+  document.getElementById('ct').innerHTML=h;
+}
+
+function upProg(di, viewDate){
+  const tot=totalDay(di, viewDate), done=ck.size;
+  const pct=tot>0?Math.round(done/tot*100):0;
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('pt').textContent=tot>0?(done+' de '+tot+' tomas'):'Sin tomas';
+  document.getElementById('pp').textContent=tot>0?(pct+'%'):'';
+  document.getElementById('fd').textContent=done;
+  document.getElementById('ft').textContent=tot;
+  document.getElementById('cb').classList.toggle('show',tot>0&&done>=tot);
+}
+
+function tog(id,di){
+  if(ck.has(id))ck.delete(id);else ck.add(id);
+  try{localStorage.setItem('sup:'+dkey,JSON.stringify([...ck]));}catch(e){}
+  const date=gd(); render(di,date); upProg(di,date);
+}
+
+function resetDay(){
+  if(!confirm('¿Reiniciar todas las tomas de hoy?'))return;
+  ck=new Set();
+  try{localStorage.removeItem('sup:'+dkey);}catch(e){}
+  const date=gd(),di=date.getDay(); render(di,date); upProg(di,date);
+}
+
+function cd(d){off+=d;loadDay();}
+function gt(){off=0;loadDay();}
+loadDay();
+</script>
+</body>
+</html>
